@@ -32,6 +32,8 @@ import { useWindowSize } from '@vueuse/core'
 import * as animations from '@/composables/useAnimations' // Обновите путь в соответствии с вашим проектом
 import { toggleFullScreen } from '@/composables/useFullscreen' // Обновите путь в соответствии с вашим проектом
 import { resizeRendererToDisplaySize } from '@/composables/useResponsiveness' // Обновите путь в соответствии с вашим проектом
+// import RoverModel from '@/public/models/rover.glb'
+import {loadModel} from "@/composables/useLoader";
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 let renderer: WebGLRenderer
@@ -83,8 +85,8 @@ function init() {
 
   // ===== 💡 LIGHTS =====
   ambientLight = new AmbientLight('white', 0.4)
-  pointLight = new PointLight('white', 20, 100)
-  pointLight.position.set(-2, 2, 2)
+  pointLight = new PointLight('white', 50, 100)
+  pointLight.position.set(-2, 4, 2)
   pointLight.castShadow = true
   pointLight.shadow.radius = 4
   pointLight.shadow.camera.near = 0.5
@@ -119,8 +121,9 @@ function init() {
   plane.rotateX(Math.PI / 2)
   plane.receiveShadow = true
 
-  scene.add(cube)
+  // scene.add(cube)
   scene.add(plane)
+  const model = loadModel('models/rover.glb', scene)
 
   // ===== 🎥 CAMERA =====
   camera = new PerspectiveCamera(50, aspectRatio.value, 0.1, 100)
@@ -152,7 +155,7 @@ function init() {
   pointLightHelper.visible = false
   scene.add(pointLightHelper)
 
-  const gridHelper = new GridHelper(20, 20, 'teal', 'darkgray')
+  const gridHelper = new GridHelper(100, 20, 'teal', 'darkgray')
   gridHelper.position.y = -0.01
   scene.add(gridHelper)
 
