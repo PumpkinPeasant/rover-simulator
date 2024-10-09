@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "rover-simulator",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,9 +9,15 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "devDependencies": {
+    "@types/three": "^0.169.0"
+  },
   "dependencies": {
     "nuxt": "^3.13.0",
+    "three": "^0.169.0",
+    "lil-gui": "^0.19.2",
     "vue": "latest",
+    "@vueuse/core": "^10.9.0",
     "vue-router": "latest"
   }
 }
