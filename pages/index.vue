@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
+import {ref, onMounted, onBeforeUnmount, watch, computed} from 'vue'
 import {
   AmbientLight,
   AxesHelper,
@@ -24,14 +24,14 @@ import {
   Scene,
   WebGLRenderer,
 } from 'three'
-import { DragControls } from 'three/examples/jsm/controls/DragControls'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import {DragControls} from 'three/examples/jsm/controls/DragControls'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import GUI from 'lil-gui'
-import { useWindowSize } from '@vueuse/core'
+import {useWindowSize} from '@vueuse/core'
 import * as animations from '@/composables/useAnimations' // Обновите путь в соответствии с вашим проектом
-import { toggleFullScreen } from '@/composables/useFullscreen' // Обновите путь в соответствии с вашим проектом
-import { resizeRendererToDisplaySize } from '@/composables/useResponsiveness' // Обновите путь в соответствии с вашим проектом
+import {toggleFullScreen} from '@/composables/useFullscreen' // Обновите путь в соответствии с вашим проектом
+import {resizeRendererToDisplaySize} from '@/composables/useResponsiveness' // Обновите путь в соответствии с вашим проектом
 // import RoverModel from '@/public/models/rover.glb'
 import {loadModel} from "@/composables/useLoader";
 
@@ -51,16 +51,16 @@ let clock: Clock
 let stats: Stats
 let gui: GUI
 
-const animation = { enabled: true, play: true }
+const animation = {enabled: true, play: true}
 
-const { width, height } = useWindowSize()
+const {width, height} = useWindowSize()
 const aspectRatio = computed(() => width.value / height.value)
 
 function init() {
   if (!canvas.value) return
 
   // ===== 🖼️ CANVAS, RENDERER, & SCENE =====
-  renderer = new WebGLRenderer({ canvas: canvas.value, antialias: true, alpha: true })
+  renderer = new WebGLRenderer({canvas: canvas.value, antialias: true, alpha: true})
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = PCFSoftShadowMap
@@ -84,9 +84,9 @@ function init() {
   }
 
   // ===== 💡 LIGHTS =====
-  ambientLight = new AmbientLight('white', 0.4)
-  pointLight = new PointLight('white', 50, 100)
-  pointLight.position.set(-2, 4, 2)
+  ambientLight = new AmbientLight('white', 0.8)
+  pointLight = new PointLight('white', 80, 150)
+  pointLight.position.set(-2, 6, 2)
   pointLight.castShadow = true
   pointLight.shadow.radius = 4
   pointLight.shadow.camera.near = 0.5
@@ -108,33 +108,34 @@ function init() {
   cube.castShadow = true
   cube.position.y = 0.5
 
-  const planeGeometry = new PlaneGeometry(3, 3)
-  const planeMaterial = new MeshLambertMaterial({
-    color: 'gray',
-    emissive: 'teal',
-    emissiveIntensity: 0.2,
-    side: 2,
-    transparent: true,
-    opacity: 0.4,
-  })
-  const plane = new Mesh(planeGeometry, planeMaterial)
-  plane.rotateX(Math.PI / 2)
-  plane.receiveShadow = true
-
-  // scene.add(cube)
-  scene.add(plane)
-  const model = loadModel('models/rover.glb', scene)
+  // const planeGeometry = new PlaneGeometry(50, 50)
+  // const planeMaterial = new MeshLambertMaterial({
+  //   color: 'gray',
+  //   emissive: 'teal',
+  //   emissiveIntensity: 0.2,
+  //   side: 2,
+  //   transparent: true,
+  //   opacity: 0.4,
+  // })
+  // const plane = new Mesh(planeGeometry, planeMaterial)
+  // plane.rotateX(Math.PI / 2)
+  // plane.receiveShadow = true
+  //
+  // // scene.add(cube)
+  // scene.add(plane)
 
   // ===== 🎥 CAMERA =====
   camera = new PerspectiveCamera(50, aspectRatio.value, 0.1, 100)
-  camera.position.set(2, 2, 5)
+  camera.position.set(5, 12, 0)
 
   // ===== 🕹️ CONTROLS =====
   cameraControls = new OrbitControls(camera, renderer.domElement)
-  cameraControls.target = cube.position.clone()
-  cameraControls.enableDamping = true
-  cameraControls.autoRotate = false
-  cameraControls.update()
+  // cameraControls.target = cube.position.clone()
+  // cameraControls.enableDamping = true
+  // cameraControls.autoRotate = false
+  // cameraControls.update()
+
+  const model = loadModel('models/rover.glb', scene, camera)
 
   dragControls = new DragControls([cube], camera, renderer.domElement)
   dragControls.addEventListener('hoveron', onHoverOn)
@@ -165,7 +166,7 @@ function init() {
   document.body.appendChild(stats.dom)
 
   // ==== 🐞 DEBUG GUI ====
-  gui = new GUI({ title: '🐞 Debug GUI', width: 300 })
+  gui = new GUI({title: '🐞 Debug GUI', width: 300})
 
   const cubeOneFolder = gui.addFolder('Cube one')
 
@@ -219,7 +220,7 @@ function init() {
     localStorage.removeItem('guiState')
     gui.reset()
   }
-  gui.add({ resetGui }, 'resetGui').name('RESET')
+  gui.add({resetGui}, 'resetGui').name('RESET')
 
   gui.close()
 }
