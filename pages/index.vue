@@ -34,6 +34,7 @@ import {toggleFullScreen} from '@/composables/useFullscreen' // Обновите
 import {resizeRendererToDisplaySize} from '@/composables/useResponsiveness' // Обновите путь в соответствии с вашим проектом
 // import RoverModel from '@/public/models/rover.glb'
 import {loadModel} from "@/composables/useLoader";
+import roverModel from "~/scripts/roverModel";
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 let renderer: WebGLRenderer
@@ -135,7 +136,9 @@ function init() {
   // cameraControls.autoRotate = false
   // cameraControls.update()
 
-  const model = loadModel('models/rover.glb', scene, camera)
+  loadModel('models/rover.glb').then(model => {
+    roverModel(model, scene, camera)
+  })
 
   dragControls = new DragControls([cube], camera, renderer.domElement)
   dragControls.addEventListener('hoveron', onHoverOn)
